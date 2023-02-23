@@ -31,20 +31,21 @@ function checkInputValue(countries) {
   };
 };
 
-function onSearch(e) {
+async function onSearch(e) {
   e.preventDefault();
 
   const valueInput = e.target.value;
 
   if (valueInput.trim()) {
-    fetchCountries(valueInput.trim())
-      .then(checkInputValue)
-    .catch(error => {
+    try {
+      const response = await fetchCountries(valueInput.trim());
+      const checked = await checkInputValue(response);
+      return checked;
+    } catch (error) {
     inputError();
     clearCountryInfo();
     clearCountryList();
-    });
-    
+    }
   } else if (valueInput.trim() === '') {
     clearCountryInfo();
     clearCountryList();
